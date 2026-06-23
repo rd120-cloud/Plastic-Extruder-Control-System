@@ -52,12 +52,6 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
-osThreadId_t blinkTaskHandle:
-const osThreadAttr_t blinkTask_attributes = {
-  .name = "blinkTask",
-  .stack_size = 128 * 4, // 512 bytes allocated
-  .priority = (osPriority_t) osPriorityNormal,
-};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,7 +60,6 @@ static void MX_GPIO_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
-void StartBlinkTask(void *argument);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -131,7 +124,6 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  blinkTaskHandle = osThreadNew(StartBlinkTask, NULL, &blinkTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -226,16 +218,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-// LED blink test task
-void StartBlinkTask(void *argument) {
-  for(;;) {
-    // Assuming PA5 or similar is assigned to an onboard LED
-    HAL_GPIO_TogglePin(GPIOB, FAN_0_Pin); 
-    
-    // Non-blocking RTOS delay (allows other tasks to run during the wait)
-    osDelay(500); 
-  }
-}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -251,7 +233,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    HAL_GPIO_TogglePin(GPIOB, FAN_0_Pin); 
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
