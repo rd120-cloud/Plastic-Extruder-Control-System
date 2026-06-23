@@ -1,8 +1,8 @@
 // Defining pins for BigTreeTech SKR2
 
-// Heater is HE0, and thermistor is TH0
+// Heater is the BED, and thermistor is TH0
 // Thermistor must be 100k NTC
-#define HEATER_POWER PB3
+#define HEATER_POWER PD7
 #define HEATER_THERM PA2
 
 // Preheater is HE1, thermistor is TH1
@@ -36,8 +36,12 @@
 // CYD interface, broken out from 10pin EXP1 connector to 2 4pin Molex PicoBlade
 #define CYD_VIN "EXP1 5v"
 #define CYD_GND "EXP1 GND" // Connect to CYD P5 (or P1) GND and P3 GND
-#define CYD_TX PE13 // P5 (P1) TX
-#define CYD_RX PE12 // P5 (P1) RX
+#define CYD_TX PE12 // P5 (P1) TX
+#define CYD_RX PE13 // P5 (P1) RX
 #define CYD_IO35 PE11 // Input only on CYD, output only on SKR2
 #define CYD_IO22 PE10
 #define CYD_IO21 // Backlight control, NC on SKR2
+
+// I2C interface, from BTT I2C pins
+#define I2C_SCL PB8
+#define I2C_SDA PB9 
