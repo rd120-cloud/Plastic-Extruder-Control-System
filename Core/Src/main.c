@@ -22,7 +22,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "skr2_pins.h"
+//#include <Wire.h>            // I2C
+//#include <NTC_Thermistor.h>  // Thermistor lib: https://github.com/suoapvs/NTC_Thermistor
+//#include <TMCStepper.h>      // https://github.com/bigtreetech/TMCStepper
+#include "skr2_pins.h" // PIN assignments for BTT SKR2
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,15 +52,21 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
-
+osThreadId_t blinkTaskHandle:
+const osThreadAttr_t blinkTask_attributes = {
+  .name = "blinkTask",
+  .stack_size = 128 * 4, // 512 bytes allocated
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
-
+void StartBlinkTask(void *argument);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -89,10 +98,11 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -121,7 +131,7 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  blinkTaskHandle = osThreadNew(StartBlinkTask, NULL, &blinkTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -185,8 +195,47 @@ void SystemClock_Config(void)
   }
 }
 
-/* USER CODE BEGIN 4 */
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
 
+  /* USER CODE END MX_GPIO_Init_1 */
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, FAN_2_Pin|FAN_1_Pin|FAN_0_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : FAN_2_Pin FAN_1_Pin FAN_0_Pin */
+  GPIO_InitStruct.Pin = FAN_2_Pin|FAN_1_Pin|FAN_0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+
+  /* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+// LED blink test task
+void StartBlinkTask(void *argument) {
+  for(;;) {
+    // Assuming PA5 or similar is assigned to an onboard LED
+    HAL_GPIO_TogglePin(GPIOB, FAN_0_Pin); 
+    
+    // Non-blocking RTOS delay (allows other tasks to run during the wait)
+    osDelay(500); 
+  }
+}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
