@@ -12,7 +12,7 @@ This system operates with a linear, continuous processing sequence.
 7) Check tolerance (feedback to extruder to control spooling and droop)
 8) Spool plastic
 
-![Fig 1. A visual depiction of the plastic recycling process]('Flowchart of procedure.png')
+![Fig 1. A visual depiction of the plastic recycling process](./Flowchart%20of%20procedure.png)
 
 ## Control System Features
 **This section is for development specs**
