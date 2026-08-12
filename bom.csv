@@ -1,0 +1,4 @@
+Item, Quantity, Names, Description, Price, Supplier
+BigTreeTech SKR2, 1, BTT_SKR2, Printer controller board used to manage main extruder system, NA, RASTIC
+Raspberry Pi 5, 1, RPi5, "SBC used for interface control, logging to web, managing extrusion sessions, and maybe computer vision monitoring, if desired", 110-130, Industrial (e.g. Mouser) or Adafruit
+Cheap Yellow Display ESP32, 1, CYD, "ESP32 used for interface control, logging to the web, and managing extrusion sessions. Cannot operate computer vision (main difference from Raspberry Pi 5)", ~20, Amazon or Ebay
